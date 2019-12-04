@@ -35,4 +35,18 @@ def writeToFile(name,data):
 def deleteContents(path):
     with open(path,'w'):
         pass
-writeToFile('BBC/crawled.txt','\nwhats up')
+# using a set since it does not allow duplication since that is needed to make sure duplicate links are not copied.
+# Read the crawled or queue files and convert to set.
+def fileToSet(fileName):
+    convertedSet = set()
+    with open(fileName,'rt') as f:
+        for eachline in f:
+            convertedSet.add(eachline.replace('\n',''))
+#             adding all links to the set
+    return convertedSet
+# converting a set to a file.
+def setToFile(linksSet, fileName):
+    deleteContents(fileName)
+    for eachLink in linksSet:
+        writeToFile(fileName, eachLink)
+deleteContents('BBC/crawled.txt')
