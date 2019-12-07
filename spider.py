@@ -1,6 +1,8 @@
 from urllib.request import urlopen
 from findLinks import findLinks
+from extractDomain import *
 from general import *
+import ssl
 # Spider class is a class to initiate spiders to crawl the web
 class Spider:
     # global variables declared since all instances of spider should refer to the same variables rather than having their own instances.
@@ -36,17 +38,24 @@ class Spider:
             Spider.updateFile()
     @staticmethod
     def getLinks(pageURL):
+        htmlInString = ''
         try:
             print(pageURL, 'page url')
-            response = urlopen(pageURL)
-            if response.getheader('Content-Type')=="text/html":
-                htmlInbinary = response.read()
-                htmlInString = htmlInbinary.decode('utf-8')
-                print(htmlInString)
+            ctx = ssl.create_default_context()
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+            response = urlopen(pageURL, context=ctx).read()
+            html = str(response)
+            print('whats up')
+            print('This is response: \n',response)
+            # the if statement checks if the content gotten from the url is HTML or not.
+            # htmlInbinary = response.read()
+            # htmlInString = htmlInbinary.decode('utf-8')
             finder = findLinks(Spider.startURL,pageURL)
-            finder.feed(htmlInString)
+            print('can declare function')
+            finder.feed(html)
         except:
-            print('Somethings not working')
+            print('Somethings not working in getLinks')
             return set()
         return finder.pageLinks()
     @staticmethod

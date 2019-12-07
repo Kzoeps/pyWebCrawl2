@@ -24,7 +24,6 @@ def newFile(name, data):
     file = open(name,'w')
     file.write(data)
     file.close()
-createFiles('BBC','https://www.bbc.com/')
 
 # writing data onto an existing file
 def writeToFile(name,data):
@@ -49,4 +48,4 @@ def setToFile(linksSet, fileName):
     deleteContents(fileName)
     for eachLink in linksSet:
         writeToFile(fileName, eachLink)
-deleteContents('BBC/crawled.txt')
+
