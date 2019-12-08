@@ -1,5 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
+import sys
+
 
 
 class webScrap:
@@ -47,17 +49,24 @@ class webScrap:
 
 
 def main():
-    open_queu = open('queue.txt','r+')
+    open_queu = open('indeed/queue.txt','r+')
     read_queu = open_queu.read()
     read_queuList = read_queu.split("\n")
     print(read_queuList)
+    total_url=[]
     for url in range(len(read_queuList)-1):
         myurl=webScrap(read_queuList[url])
         myurl.openUrl()
         myurl.job_Info()
         myurl.location()
-        
-main()
+        total_url.append(url)
+        if len(total_url)<10:
+            continue
+        else:
+            sys.exit()
+
+if __name__ == '__main__':        
+    main()
 
         
         
