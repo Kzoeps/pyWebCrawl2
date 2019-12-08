@@ -3,12 +3,12 @@ from queue import Queue
 from spider import Spider
 from extractDomain import *
 from general import *
-pjName = ''
-startURL=''
+pjName = 'indeed'
+startURL='https://www.indeed.com/q-USA-jobs.html'
 domainName = getSubDomain(startURL)
 queueFile = pjName+'/queue.txt'
 crawledFile = pjName+'/crawled.txt'
-numThreads = 12
+numThreads = 10
 
 threadQueue = Queue()
 Spider(pjName,startURL,domainName)
@@ -31,6 +31,7 @@ def createSpiders():
          t.daemon = True
          t.start()
 def work():
+    queuedLinks = fileToSet(queueFile)
     while True:
         url = threadQueue.get()
         Spider.crawl(threading.current_thread().name, url)
