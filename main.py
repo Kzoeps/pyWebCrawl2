@@ -1,14 +1,17 @@
+
+
 import threading
 from queue import Queue
 from spider import Spider
 from extractDomain import *
 from general import *
+from classWebscrape import *
 pjName = 'indeed'
 startURL='https://www.indeed.com/q-USA-jobs.html'
 domainName = getSubDomain(startURL)
 queueFile = pjName+'/queue.txt'
 crawledFile = pjName+'/crawled.txt'
-numThreads = 12
+numThreads = 10
 
 threadQueue = Queue()
 Spider(pjName,startURL,domainName)
@@ -22,15 +25,38 @@ def createJobs():
 
 def crawl():
     queuedLinks  = fileToSet(queueFile)
-    if len(queuedLinks)>0:
-        print(str(len(queuedLinks))+' left to crawl')
+   # print(queuedLinks)
+
+    if len(queuedLinks)<50 and len(queuedLinks)>0:
+        #print(str(len(queuedLinks))+' left to crawl')
+        print(len(queuedLinks))
+
         createJobs()
+    else:
+        open_queu = open('Indeed/queue.txt','r+')
+        read_queu = open_queu.read()
+        read_queuList = read_queu.split("\n")
+        print(read_queuList)
+        total_url=[]
+        for url in range(len(read_queuList)-1):
+            myurl=webScrap(read_queuList[url])
+            myurl.openUrl()
+            myurl.job_Info()
+            myurl.location()
+            total_url.append(url)
+            if len(total_url)<10:
+                continue
+            else:
+                sys.exit()
+
+        
 def createSpiders():
     for x in range(numThreads):
          t = threading.Thread(target=work)
          t.daemon = True
          t.start()
 def work():
+    queuedLinks = fileToSet(queueFile)
     while True:
         url = threadQueue.get()
         Spider.crawl(threading.current_thread().name, url)

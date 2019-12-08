@@ -52,7 +52,6 @@ def main():
     open_queu = open('indeed/queue.txt','r+')
     read_queu = open_queu.read()
     read_queuList = read_queu.split("\n")
-    print(read_queuList)
     total_url=[]
     for url in range(len(read_queuList)-1):
         myurl=webScrap(read_queuList[url])

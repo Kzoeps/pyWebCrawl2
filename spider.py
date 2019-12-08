@@ -28,9 +28,9 @@ class Spider:
     def crawl(spiderName, pageURL):
         if pageURL not in Spider.crawledSet:
             #         to make sure to not crawl a file thats already been crawled.
-            print(spiderName + ' crawling ' + pageURL)
-            print('Queue: ' + str(len(Spider.queueSet)))
-            print('Crawled: ' + str(len(Spider.crawledSet)))
+            #print(spiderName + ' crawling ' + pageURL)
+            #print('Queue: ' + str(len(Spider.queueSet)))
+            #print('Crawled: ' + str(len(Spider.crawledSet)))
             Spider.addToQueue(Spider.getLinks(pageURL))
             Spider.queueSet.remove(pageURL)
             # removes the pageURL from the queueset since its been crawled and adds it to the crawled set.
@@ -38,21 +38,13 @@ class Spider:
             Spider.updateFile()
     @staticmethod
     def getLinks(pageURL):
-        htmlInString = ''
         try:
-            print(pageURL, 'page url')
             ctx = ssl.create_default_context()
             ctx.check_hostname = False
             ctx.verify_mode = ssl.CERT_NONE
             response = urlopen(pageURL, context=ctx).read()
             html = str(response)
-            print('whats up')
-            print('This is response: \n',response)
-            # the if statement checks if the content gotten from the url is HTML or not.
-            # htmlInbinary = response.read()
-            # htmlInString = htmlInbinary.decode('utf-8')
             finder = findLinks(Spider.startURL,pageURL)
-            print('can declare function')
             finder.feed(html)
         except:
             print('Somethings not working in getLinks')
