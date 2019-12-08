@@ -1,38 +1,39 @@
-import os
-# import the operating system library
-def createrDir(directory):
-    if not os.path.exists(directory):
-        # checks if the directory already exists or not by checking if the path already exists or not
-        print('creating directory for "'+directory+'"')
-        os.makedirs(directory)
-#         creates a directory
-# create queued and crawled files
+import threading
+from queue import Queue
+from spider import Spider
+from extractDomain import *
+from general import *
+pjName = ''
+startURL=''
+domainName = getSubDomain(startURL)
+queueFile = pjName+'/queue.txt'
+crawledFile = pjName+'/crawled.txt'
+numThreads = 12
 
-def createFiles(project, startURL):
-    queueFile = project + '/queue.txt'
-    # a variable which stores the path of the queue file.
-    crawledFile = project + '/crawled.txt'
-    # a variable which stores the path of the crawled file.
-    if not os.path.isfile(queueFile):
-        # checks if file is present or not
-        newFile(queueFile, startURL)
-    if not os.path.isfile(crawledFile):
-        newFile(crawledFile, '')
+threadQueue = Queue()
+Spider(pjName,startURL,domainName)
 
-# newFile is a function to create a new file.
-def newFile(name, data):
-    file = open(name,'w')
-    file.write(data)
-    file.close()
-createFiles('BBC','https://www.bbc.com/')
+# each link is a job and has to be crawled
+def createJobs():
+    for link in fileToSet(queueFile):
+        threadQueue.put(link)
+    threadQueue.join()
+    crawl()
 
-# writing data onto an existing file
-def writeToFile(name,data):
-    with open(name,'a') as file:
-        file.write(data+'\n')
-
-# delete data of an existing file.
-def deleteContents(path):
-    with open(path,'w'):
-        pass
-writeToFile('BBC/crawled.txt','\nwhats up')
+def crawl():
+    queuedLinks  = fileToSet(queueFile)
+    if len(queuedLinks)>0:
+        print(str(len(queuedLinks))+' left to crawl')
+        createJobs()
+def createSpiders():
+    for x in range(numThreads):
+         t = threading.Thread(target=work)
+         t.daemon = True
+         t.start()
+def work():
+    while True:
+        url = threadQueue.get()
+        Spider.crawl(threading.current_thread().name, url)
+        threadQueue.task_done()
+createSpiders()
+crawl()
