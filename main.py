@@ -3,8 +3,8 @@ from queue import Queue
 from spider import Spider
 from extractDomain import *
 from general import *
-pjName = ''
-startURL=''
+pjName = 'indeed'
+startURL='https://www.indeed.com/q-USA-jobs.html'
 domainName = getSubDomain(startURL)
 queueFile = pjName+'/queue.txt'
 crawledFile = pjName+'/crawled.txt'
