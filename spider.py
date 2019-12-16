@@ -38,17 +38,19 @@ class Spider:
             Spider.updateFile()
     @staticmethod
     def getLinks(pageURL):
-        try:
-            ctx = ssl.create_default_context()
-            ctx.check_hostname = False
-            ctx.verify_mode = ssl.CERT_NONE
-            response = urlopen(pageURL, context=ctx).read()
-            html = str(response)
-            finder = findLinks(Spider.startURL,pageURL)
-            finder.feed(html)
-        except:
-            print('Somethings not working in getLinks')
-            return set()
+##        try:
+##            ctx = ssl.create_default_context()
+##            ctx.check_hostname = False
+##            ctx.verify_mode = ssl.CERT_NONE
+        #response = urlopen(pageURL, context=ctx).read()
+
+        response = urlopen(pageURL).read()
+        html = str(response)
+        finder = findLinks(Spider.startURL,pageURL)
+        finder.feed(html)
+##        except:
+##            print('Somethings not working in getLinks')
+##            return set()
         return finder.pageLinks()
     @staticmethod
     def addToQueue(links):
