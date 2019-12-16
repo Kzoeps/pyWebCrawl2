@@ -10,15 +10,13 @@ from spider import Spider
 from extractDomain import *
 from general import *
 from classWebscrape import *
-pjName = 'indeed'
-startURL='https://www.indeed.com/q-USA-jobs.html'
 domainName = getSubDomain(startURL)
 queueFile = pjName+'/queue.txt'
 crawledFile = pjName+'/crawled.txt'
 numThreads = 1
 
 threadQueue = Queue()
-Spider(pjName,startURL,domainName)
+Spider('indeed','https://www.indeed.com/q-USA-jobs.html',domainName)
 
 # each link is a job and has to be crawled
 def createJobs():

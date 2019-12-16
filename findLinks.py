@@ -23,8 +23,4 @@ class findLinks(HTMLParser):
                     self.allLinks.add(url)
     def pageLinks(self):
         return self.allLinks
-if __name__ == '__main__':
-    def main():
-        finder = findLinks('https://www.bbc.com/','bbc.com')
-        finder.feed('<html><head><a href = "/askdnfjaksjdnf"><body>')
 # .feed is used to parse the html in the object.
