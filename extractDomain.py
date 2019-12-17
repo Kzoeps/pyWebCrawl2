@@ -11,6 +11,7 @@ def getSubDomain(url):
     try:
         domainList = getDomain(url).split('.')
         return domainList[-2]+'.'+domainList[-1]
+    # this returns the last and second last element of the domain which is the .com and what comes before that.
     except:
         print('something not working in extractDomain')
         return ''
