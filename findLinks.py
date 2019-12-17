@@ -2,10 +2,6 @@ from html.parser import *
 from urllib import parse
 # htmlParser is a library for parsing html.
 class findLinks(HTMLParser):
-    # def error has to be written for HTMLParser since its a requirement for exception handling
-    #def error(self, message):
-     #   print('somethings not working in findLinks')
-      #  pass
     def __init__(self,startURL, pageURL):
         super().__init__()
         self.startURL = startURL
