@@ -19,15 +19,6 @@ numThreads = 1
 
 threadQueue = Queue()
 Spider('indeed',startURL,domainName)
-
-# each link is a job and has to be crawled
-def createJobs():
-    for link in fileToSet(queueFile):
-        threadQueue.put(link)
-        print('progress')            
-    threadQueue.join()
-    crawl()
-    
 def openFile():    
     open_queu = open('indeed/queue.txt','r+')
     read_queu = open_queu.read()
@@ -37,78 +28,27 @@ def openFile():
         myurl=webScrap(read_queuList[url])
         myurl.openUrl()
         myurl.job_Info()
-##       # myurl.location()
-##        #total_url.append(url)        
-##        #if len(total_url)>500:
-##           # sys.exit()
-##        #n+=1
-##        if n>50:
-##            sys.exit()
-##        else:
-##            pass
-       
-
-def crawl():
-##    createSpiders()
-    queuedLinks  = fileToSet(queueFile)
-    if len(queuedLinks)>0:        
-        #print(str(len(queuedLinks))+' left to crawl')
-        createJobs()
-        
-def createSpiders():
-    for x in range(numThreads):
-         t = threading.Thread(target=work)
-         t.daemon = True
-         t.start()
-
 def window():
     sleep(4)
     win=GraphWin('WEB scraping',600,600)
     win.setCoords(0.0,0.0,130.0,130.0)
 def work():
     queuedLinks = fileToSet(queueFile)
-    while True:
-        url = threadQueue.get()
-        Spider.crawl(threading.current_thread().name, url)
-        threadQueue.task_done()
-#def action():    
-##    p1 = Process(target=crawl, args=())
-##    p2 = Process(target = openFile, args=())
-##    p1.start()
-##    print('progress')
-##    p2.start()
-##    print('here')
-##    p1.join()
-##    p2.join()
-createSpiders()
+    linkNo = 0
+    while len(queuedLinks)>0:
+        url = queuedLinks[linkNo]
+        Spider.crawl('Spider 1', url)
+        linkNo += 1
+
 
 if __name__== '__main__':
-    win=GraphWin('WEB scraping',600,600)
+    win=GraphWin('WEB scraping',800,600)
     win.setCoords(0.0,0.0,100.0,100.0)
-    
-
-##    button1=Button(win,Point(60,35),30,12,'Exit Window')
-##    button2=Button(win,Point(15,120),25,15,'Stop_Program')
-##    button3=Button(win,Point(60,60),20,10,'start')
-
-##    click= Text(Point(50,50),'click anywhere')
-##    click.draw(win)
-##    button2.activate()
-##    button3.activate()
-##    start=time.time()
-##    period = 1
-    
-##    while not button1.isClicked(pt):            
-##        if button3.isClicked(pt):
 
     p1 = Process(target=work, args=())
     p2 = Process(target=openFile, args=())
-##    p3 = Process(target = loading , args = (
-##        ))
     p1.start()
     p2.start()
-##    p3.start()
-##    win.setBackground('black')
     loading_text=Text(Point(50,65),'LOADING...')
     loading_text.setTextColor('red')
     loading_text.setSize(20)
@@ -135,10 +75,10 @@ if __name__== '__main__':
     j=0
     while not j>=6:
         name[j].setFill('red')
-        sleep(7)
+        sleep(0.5)
         j=j+1
 
-    sleep(7)
+    sleep(0.5)
     x1=35
     y1=55
     x2=40
@@ -153,37 +93,25 @@ if __name__== '__main__':
         y2=y2
 
     loading_text.undraw()
-##        
-
-##    click.setText('please wait')
-
-##    click.setText('crawling')
-##    click.setText('scraping the internet')
-##    click.setText('creating files for jobs')
-##    click.setText('Almost Done')
     p1.terminate()
     p2.terminate()
-##    p3.terminate()
-##    click.setText('Done crawling')
     p1.join()            
     p2.join()
-##    p3.join()
-##    click.undraw()
 
-    
-##              
-##    sleep(1)
-##    win.close()
 
-    jobName = Text(Point(20,90),'Job name')
+    jobName = Text(Point(15,90),'Job name')
     jobName.draw(win)
     location = Text(Point(55,90),'Location')
     location.draw(win)
-    search = Entry(Point(70,90),10)
-    searchText = Text(Point(70,95),'Search')
+    search = Entry(Point(70,90),12)
+    searchJob = Entry(Point(35,90),12)
+    searchJob.draw(win)
+    searchText = Text(Point(70,95),'Search Location')
+    searchJobText = Text(Point(35,95),'Search Job')
     search.draw(win)
     searchText.draw(win)
-    searchButton = Button(win,Point(90,90),10,6,'search')
+    searchJobText.draw(win)
+    searchButton = Button(win,Point(92,90),8,6,'search')
     jobsFile = open('jobs.txt','r')
     jobFiletext = jobsFile.read()
     jobsFileList = jobFiletext.split('\n')
@@ -191,19 +119,18 @@ if __name__== '__main__':
     jobFiletextLower = jobFiletext.lower()
     jobsFileListLower = jobFiletextLower.split('\n')
     jobsFileListLower = jobsFileListLower[1:]
-    print(jobsFileList)
     searchedList = []
     jobsLocsDrawnPos = []
     searchNotFound = False
     for job_location in range(1,len(jobsFileList)):
         jobsFileList[job_location] = jobsFileList[job_location].split(':')
+        jobsFileListLower[job_location] = jobsFileListLower[job_location].split(':')
     pos = 5
     for eachJob in range(10):
         if len(jobsFileList[eachJob][0])>27:
             jobText = jobsFileList[eachJob][0][0:27]+'...'
         else:
             jobText = jobsFileList[eachJob][0]
-        print(jobText)
         displayJob = Text(Point(20,80-pos),jobText)
         displayJob.draw(win)
         locationText = jobsFileList[eachJob][1]
@@ -216,11 +143,17 @@ if __name__== '__main__':
     while exitButton.isClicked(pt)!=True:
         if searchButton.isClicked(pt):
             searchVar = search.getText().lower()
+            searchJobVar = searchJob.getText().lower()
             pos = 5
-
-            for eachJobLocation in range(len(jobsFileListLower)):
-                if searchVar in jobsFileListLower[eachJobLocation]:
-                    searchedList.append(jobsFileList[eachJobLocation])
+            if searchJobVar == '':
+                for eachJobLocation in range(len(jobsFileListLower)):
+                    if searchVar in jobsFileListLower[eachJobLocation][1]:
+                        searchedList.append(jobsFileList[eachJobLocation])
+            else:
+                for eachJobLocation in range(len(jobsFileListLower)):
+                    if searchJobVar in jobsFileListLower[eachJobLocation][0]:
+                        searchedList.append(jobsFileList[eachJobLocation])
+                
             for eachDrawnText in range(len(jobsLocsDrawnPos)):
                 jobsLocsDrawnPos[eachDrawnText][0].undraw()
                 jobsLocsDrawnPos[eachDrawnText][1].undraw()
@@ -243,8 +176,7 @@ if __name__== '__main__':
                     searchedJob.draw(win)
                     searchedLocation.draw(win)
                     jobsLocsDrawnPos.append([searchedJob,searchedLocation])
-                    pos+=5
-              #  
+                    pos+=5  
             else:
                 notFoundText = Text(Point(50,50),'Searched Text Not Found,\n Please search again!\n Thank You!')
                 notFoundText.setSize(20)
@@ -253,6 +185,7 @@ if __name__== '__main__':
                 searchNotFound = True
                 
             search.setText('')
+            searchJob.setText('')
             searchedList = []
             
         pt = win.getMouse()
