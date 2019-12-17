@@ -4,7 +4,6 @@ import threading
 from graphics import*
 from Cool_button import Button
 from time import sleep
-##import time
 from queue import Queue
 from spider import Spider
 from extractDomain import *
@@ -34,7 +33,9 @@ def window():
     win.setCoords(0.0,0.0,130.0,130.0)
 def work():
     queuedLinks = fileToSet(queueFile)
+##    Queued links serves as the basis on which the spider should crawl
     linkNo = 0
+##    link No is the accumulator variable used to crawlthrough links
     while len(queuedLinks)>0:
         url = queuedLinks[linkNo]
         Spider.crawl('Spider 1', url)
@@ -75,10 +76,10 @@ if __name__== '__main__':
     j=0
     while not j>=6:
         name[j].setFill('red')
-        sleep(0.5)
+        sleep(5)
         j=j+1
 
-    sleep(0.5)
+    sleep(5)
     x1=35
     y1=55
     x2=40
@@ -98,21 +99,25 @@ if __name__== '__main__':
     p1.join()            
     p2.join()
 
-
+##    Graphic variables -->
     jobName = Text(Point(15,90),'Job name')
-    jobName.draw(win)
-    location = Text(Point(55,90),'Location')
-    location.draw(win)
-    search = Entry(Point(70,90),12)
-    searchJob = Entry(Point(35,90),12)
-    searchJob.draw(win)
     searchText = Text(Point(70,95),'Search Location')
     searchJobText = Text(Point(35,95),'Search Job')
+    location = Text(Point(55,90),'Location')
+    searchJob = Entry(Point(35,90),12)
+    searchButton = Button(win,Point(92,90),8,6,'search')
+    exitButton = Button(win,Point(80,20),7,6,'Exit')
+    jobName.draw(win)
+    location.draw(win)
+    search = Entry(Point(70,90),12)
+    searchJob.draw(win)
     search.draw(win)
     searchText.draw(win)
     searchJobText.draw(win)
-    searchButton = Button(win,Point(92,90),8,6,'search')
+##    Graphic variables end <--
+    
     jobsFile = open('jobs.txt','r')
+##    jobs.txt stores all the jobs scraped from indeed.com
     jobFiletext = jobsFile.read()
     jobsFileList = jobFiletext.split('\n')
     jobsFileList = jobsFileList[1:]
@@ -120,15 +125,20 @@ if __name__== '__main__':
     jobsFileListLower = jobFiletextLower.split('\n')
     jobsFileListLower = jobsFileListLower[1:]
     searchedList = []
+##    searchedList is a list to store all of the jobs or locations that the user wants to search
     jobsLocsDrawnPos = []
+    #jobsLocsDrawnPos is a list to store the Text objects of the work
     searchNotFound = False
+##    SearchNotFound is a variable to test whether a search result has been null
     for job_location in range(1,len(jobsFileList)):
         jobsFileList[job_location] = jobsFileList[job_location].split(':')
         jobsFileListLower[job_location] = jobsFileListLower[job_location].split(':')
+        # we split the list into a sublist of job name and location so that it is easier to access individually
     pos = 5
     for eachJob in range(10):
         if len(jobsFileList[eachJob][0])>27:
             jobText = jobsFileList[eachJob][0][0:27]+'...'
+##            This is done since some of the names of jobs are long so it needed to be compressed
         else:
             jobText = jobsFileList[eachJob][0]
         displayJob = Text(Point(20,80-pos),jobText)
@@ -138,30 +148,31 @@ if __name__== '__main__':
         displayLocation.draw(win)
         jobsLocsDrawnPos.append([displayJob,displayLocation])
         pos +=5
-    exitButton = Button(win,Point(80,20),7,6,'Exit')
+    
     pt = win.getMouse()
     while exitButton.isClicked(pt)!=True:
         if searchButton.isClicked(pt):
             searchVar = search.getText().lower()
             searchJobVar = searchJob.getText().lower()
+##            SearchVar and searchjobVar and entries for user to either search for a specific location of a job name
             pos = 5
             if searchJobVar == '':
                 for eachJobLocation in range(len(jobsFileListLower)):
                     if searchVar in jobsFileListLower[eachJobLocation][1]:
                         searchedList.append(jobsFileList[eachJobLocation])
-##                        searchedJobsAndLocationsFile.write(str('hi]'))
             else:
                 for eachJobLocation in range(len(jobsFileListLower)):
                     if searchJobVar in jobsFileListLower[eachJobLocation][0]:
                         searchedList.append(jobsFileList[eachJobLocation])
-##                        searchedJobsAndLocationsFile.write(str('hi'))
                 
             for eachDrawnText in range(len(jobsLocsDrawnPos)):
                 jobsLocsDrawnPos[eachDrawnText][0].undraw()
                 jobsLocsDrawnPos[eachDrawnText][1].undraw()
             jobsLocsDrawnPos = []
+##            # jobsLocsDrawnPos is emptied in order to store the searched variables text objects
             if len(searchedList)>10:
                 searchedList = searchedList[0:10]
+##                since there are numerous jobs we split it to 10 in order for it to be easier to read
             if len(searchedList)>0:
                 for eachSearched in range(len(searchedList)):
                     if len(searchedList[eachSearched][0])>27:
@@ -173,6 +184,7 @@ if __name__== '__main__':
                         locationSearchText = searchedList[eachSearched][1][0:27]+'...   '
                     else:
                         locationSearchText = searchedList[eachSearched][1]
+##                    writing the searched jobs onto the graphics
                     searchedJob = Text(Point(20,80-pos),jobSearchText)
                     searchedLocation = Text(Point(65,80-pos),locationSearchText)                    
                     searchedJob.draw(win)
