@@ -31,7 +31,7 @@ class webScrap:
             #print(self.jobs_titles)
             self.file_jobs.write(self.jobs_title + ' : ')
             self.file_jobs.write(self.location)
-            self.file_jobs.write('\n')
+           # self.file_jobs.write('\n')
         #return self.jobs_titles
 
     
@@ -62,9 +62,9 @@ def main():
         myurl.openUrl()
         myurl.job_Info()
         #myurl.location()
-if __name__ == '__main__':
-    
+if __name__ == '__main__':    
     main()
+
 
         
         
