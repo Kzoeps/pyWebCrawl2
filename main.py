@@ -45,11 +45,16 @@ def work():
 if __name__== '__main__':
     win=GraphWin('WEB scraping',800,600)
     win.setCoords(0.0,0.0,100.0,100.0)
-
+    #here we will make the work and openFile functions to run together
+#the p1 initiates the initial process of crawling that makes sure we get the links for using in the openFile function
     p1 = Process(target=work, args=())
+    #the p2 initiates the openFile function and takes the links generated from the work function
     p2 = Process(target=openFile, args=())
+    #the below two functions just initiates the processes and they are able to execute together
     p1.start()
     p2.start()
+    #the below two terminates functions haults the program after a specific time., 
+#we do this because the spider takes along time to crawl through the entire website hence the need to stop it
     loading_text=Text(Point(50,65),'LOADING...')
     loading_text.setTextColor('red')
     loading_text.setSize(20)
@@ -94,8 +99,11 @@ if __name__== '__main__':
         y2=y2
 
     loading_text.undraw()
+     #the below two terminates functions haults the program after a specific time., 
+#we do this because the spider takes along time to crawl through the entire website hence the need to stop 
     p1.terminate()
     p2.terminate()
+    #we then join the both processes after they are terminated in to one program
     p1.join()            
     p2.join()
 
@@ -130,7 +138,7 @@ if __name__== '__main__':
     #jobsLocsDrawnPos is a list to store the Text objects of the work
     searchNotFound = False
 ##    SearchNotFound is a variable to test whether a search result has been null
-    for job_location in range(1,len(jobsFileList)):
+    for job_location in range(len(jobsFileList)):
         jobsFileList[job_location] = jobsFileList[job_location].split(':')
         jobsFileListLower[job_location] = jobsFileListLower[job_location].split(':')
         # we split the list into a sublist of job name and location so that it is easier to access individually
