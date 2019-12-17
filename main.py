@@ -29,7 +29,7 @@ def createJobs():
     crawl()
     
 def openFile():    
-    open_queu = open('Indeed/queue.txt','r+')
+    open_queu = open('indeed/queue.txt','r+')
     read_queu = open_queu.read()
     read_queuList = read_queu.split("\n")
     
@@ -101,8 +101,8 @@ if __name__== '__main__':
 ##    while not button1.isClicked(pt):            
 ##        if button3.isClicked(pt):
 
-    p1 = Process(target=crawl, args=())
-    p2 = Process(target = openFile, args=())
+    p1 = Process(target=work, args=())
+    p2 = Process(target=openFile, args=())
 ##    p3 = Process(target = loading , args = (
 ##        ))
     p1.start()
@@ -135,10 +135,10 @@ if __name__== '__main__':
     j=0
     while not j>=6:
         name[j].setFill('red')
-        sleep(0.1)
+        sleep(7)
         j=j+1
 
-    sleep(0.1)
+    sleep(7)
     x1=35
     y1=55
     x2=40
@@ -153,7 +153,7 @@ if __name__== '__main__':
         y2=y2
 
     loading_text.undraw()
-        
+##        
 
 ##    click.setText('please wait')
 
@@ -187,12 +187,15 @@ if __name__== '__main__':
     jobsFile = open('jobs.txt','r')
     jobFiletext = jobsFile.read()
     jobsFileList = jobFiletext.split('\n')
+    jobsFileList = jobsFileList[1:]
     jobFiletextLower = jobFiletext.lower()
     jobsFileListLower = jobFiletextLower.split('\n')
+    jobsFileListLower = jobsFileListLower[1:]
+    print(jobsFileList)
     searchedList = []
     jobsLocsDrawnPos = []
     searchNotFound = False
-    for job_location in range(len(jobsFileList)):
+    for job_location in range(1,len(jobsFileList)):
         jobsFileList[job_location] = jobsFileList[job_location].split(':')
     pos = 5
     for eachJob in range(10):
@@ -200,6 +203,7 @@ if __name__== '__main__':
             jobText = jobsFileList[eachJob][0][0:27]+'...'
         else:
             jobText = jobsFileList[eachJob][0]
+        print(jobText)
         displayJob = Text(Point(20,80-pos),jobText)
         displayJob.draw(win)
         locationText = jobsFileList[eachJob][1]
@@ -242,7 +246,9 @@ if __name__== '__main__':
                     pos+=5
               #  
             else:
-                notFoundText = Text(Point(50,50),'Searched Text Not Found')
+                notFoundText = Text(Point(50,50),'Searched Text Not Found,\n Please search again!\n Thank You!')
+                notFoundText.setSize(20)
+                notFoundText.setTextColor('red')
                 notFoundText.draw(win)
                 searchNotFound = True
                 

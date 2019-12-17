@@ -10,7 +10,7 @@ class webScrap:
         
         self.url=url
         print(self.url)
-        self.file_jobs = open('Jobs.txt','a')
+        self.file_jobs = open('jobs.txt','a')
             #self.file_locations = open('Locations.txt', 'a')
 
     def openUrl(self):
@@ -34,23 +34,23 @@ class webScrap:
            # self.file_jobs.write('\n')
         #return self.jobs_titles
 
-    
-    def location(self):
-        self.jobs_data = self.soup.find_all('div',{'class':'jobsearch-SerpJobCard'})
-        for job_data in self.jobs_data[1:]:
-           # self.location_tag = job_data.find('div',{'class':'location'})
-           # self.location = self.location_tag.text if self.location_tag else 'N/A'
-            #self.file_locations.write(self.location)
-            self.file_locations.write('\n')
-            print(self.location)            
-        
-    
-
-    def saveInfo(self,file_location,file_Titles):
-        self.file_jobs = open('Jobs.txt','w')
-        self.file_location = open('Location.txt','a')
-        self.file_location.write(file_location)
-        self.file_jobs.write(file_Titles)
+##    
+##    def location(self):
+##        self.jobs_data = self.soup.find_all('div',{'class':'jobsearch-SerpJobCard'})
+##        for job_data in self.jobs_data[1:]:
+##           # self.location_tag = job_data.find('div',{'class':'location'})
+##           # self.location = self.location_tag.text if self.location_tag else 'N/A'
+##            #self.file_locations.write(self.location)
+##            self.file_locations.write('\n')
+##            print(self.location)            
+##        
+##    
+##
+##    def saveInfo(self,file_location,file_Titles):
+##        self.file_jobs = open('Jobs.txt','w')
+##        self.file_location = open('Location.txt','a')
+##        self.file_location.write(file_location)
+##        self.file_jobs.write(file_Titles)
 
 ##
 def main():
