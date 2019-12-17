@@ -191,6 +191,7 @@ if __name__== '__main__':
     jobsFileListLower = jobFiletextLower.split('\n')
     searchedList = []
     jobsLocsDrawnPos = []
+    searchNotFound = False
     for job_location in range(len(jobsFileList)):
         jobsFileList[job_location] = jobsFileList[job_location].split(':')
     pos = 5
@@ -212,42 +213,46 @@ if __name__== '__main__':
         if searchButton.isClicked(pt):
             searchVar = search.getText().lower()
             pos = 5
-            print('johnnnnnnn johnnn johnnn\n john \n john hon')
+
             for eachJobLocation in range(len(jobsFileListLower)):
                 if searchVar in jobsFileListLower[eachJobLocation]:
                     searchedList.append(jobsFileList[eachJobLocation])
+            for eachDrawnText in range(len(jobsLocsDrawnPos)):
+                jobsLocsDrawnPos[eachDrawnText][0].undraw()
+                jobsLocsDrawnPos[eachDrawnText][1].undraw()
+            jobsLocsDrawnPos = []
             if len(searchedList)>10:
                 searchedList = searchedList[0:10]
-            else:
-                pass
             if len(searchedList)>0:
-                for eachDrawnText in range(len(jobsLocsDrawnPos)):
-                    jobsLocsDrawnPos[eachDrawnText][0].undraw()
-                    jobsLocsDrawnPos[eachDrawnText][1].undraw()
                 for eachSearched in range(len(searchedList)):
-                    print(searchedList[eachSearched])
                     if len(searchedList[eachSearched][0])>27:
                         jobSearchText = searchedList[eachSearched][0][0:27]+'...   '
                     else:
                         jobSearchText = searchedList[eachSearched][0]
+        
                     if len(searchedList[eachSearched][1])>27:
                         locationSearchText = searchedList[eachSearched][1][0:27]+'...   '
                     else:
                         locationSearchText = searchedList[eachSearched][1]
                     searchedJob = Text(Point(20,80-pos),jobSearchText)
-                    searchedLocation = Text(Point(65,80-pos),locationSearchText)
-                    
+                    searchedLocation = Text(Point(65,80-pos),locationSearchText)                    
                     searchedJob.draw(win)
                     searchedLocation.draw(win)
+                    jobsLocsDrawnPos.append([searchedJob,searchedLocation])
                     pos+=5
+              #  
             else:
                 notFoundText = Text(Point(50,50),'Searched Text Not Found')
                 notFoundText.draw(win)
-            if len(searchedList)>0:
-                pass
-            else:
-                notFoundText.undraw()
+                searchNotFound = True
+                
+            search.setText('')
+            searchedList = []
+            
         pt = win.getMouse()
+        if searchNotFound == True:
+            notFoundText.undraw()
+            searchNotFound = False
     win.close()
             
             
