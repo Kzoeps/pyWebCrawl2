@@ -149,10 +149,12 @@ if __name__== '__main__':
                 for eachJobLocation in range(len(jobsFileListLower)):
                     if searchVar in jobsFileListLower[eachJobLocation][1]:
                         searchedList.append(jobsFileList[eachJobLocation])
+##                        searchedJobsAndLocationsFile.write(str('hi]'))
             else:
                 for eachJobLocation in range(len(jobsFileListLower)):
                     if searchJobVar in jobsFileListLower[eachJobLocation][0]:
                         searchedList.append(jobsFileList[eachJobLocation])
+##                        searchedJobsAndLocationsFile.write(str('hi'))
                 
             for eachDrawnText in range(len(jobsLocsDrawnPos)):
                 jobsLocsDrawnPos[eachDrawnText][0].undraw()
