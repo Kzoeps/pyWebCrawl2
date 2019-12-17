@@ -21,60 +21,6 @@ threadQueue = Queue()
 Spider('indeed',startURL,domainName)
 
 # each link is a job and has to be crawled
-win=GraphWin('WEB scraping',600,600)
-win.setCoords(0.0,0.0,100.0,100.0)
-def loading(win):
-    win.setBackground('black')
-    loading_text=Text(Point(50,65),'LOADING...')
-    loading_text.setTextColor('red')
-    loading_text.setSize(20)
-    loading_text.draw(win)
-    name=[]
-    
-    for k in range(1,7):
-        name.append('rect'+str(k))
-
-
-    x1=35
-    y1=55
-    x2=40
-    y2=50
-    n=0
-
-    for i in range(6):
-        name[i]=Rectangle(Point(x1,y1),Point(x2,y2))
-        name[i].setFill('black')
-        name[i].setOutline('black')
-        name[i].draw(win)
-        n=5
-        x1+=n
-        x2+=n
-        y1=y1
-        y2=y2
-
-    j=0
-    while not j>=6:
-        name[j].setFill('red')
-        sleep(0.32)
-        j=j+1
-
-    sleep(0.3)
-
-    x1=35
-    y1=55
-    x2=40
-    y2=50
-    n=0
-    for i in range(6):
-        name[i].undraw()
-        n=5
-        x1+=n
-        x2+=n
-        y1=y1
-        y2=y2
-
-    loading_text.undraw()
-        
 def createJobs():
     for link in fileToSet(queueFile):
         threadQueue.put(link)
@@ -137,6 +83,10 @@ def work():
 createSpiders()
 
 if __name__== '__main__':
+    win=GraphWin('WEB scraping',600,600)
+    win.setCoords(0.0,0.0,100.0,100.0)
+    
+
 ##    button1=Button(win,Point(60,35),30,12,'Exit Window')
 ##    button2=Button(win,Point(15,120),25,15,'Stop_Program')
 ##    button3=Button(win,Point(60,60),20,10,'start')
@@ -153,31 +103,71 @@ if __name__== '__main__':
 
     p1 = Process(target=crawl, args=())
     p2 = Process(target = openFile, args=())
-    p3 = Process(target = loading , args = (
-        ))
+##    p3 = Process(target = loading , args = (
+##        ))
     p1.start()
     p2.start()
-    p3.start()
+##    p3.start()
+##    win.setBackground('black')
+    loading_text=Text(Point(50,65),'LOADING...')
+    loading_text.setTextColor('red')
+    loading_text.setSize(20)
+    loading_text.draw(win)
+    name=[]    
+    for k in range(1,7):
+        name.append('rect'+str(k))
+    x1=35
+    y1=55
+    x2=40
+    y2=50
+    n=0
+    for i in range(6):
+        name[i]=Rectangle(Point(x1,y1),Point(x2,y2))
+        name[i].setFill('black')
+        name[i].setOutline('black')
+        name[i].draw(win)
+        n=5
+        x1+=n
+        x2+=n
+        y1=y1
+        y2=y2
+
+    j=0
+    while not j>=6:
+        name[j].setFill('red')
+        sleep(0.1)
+        j=j+1
+
+    sleep(0.1)
+    x1=35
+    y1=55
+    x2=40
+    y2=50
+    n=0
+    for i in range(6):
+        name[i].undraw()
+        n=5
+        x1+=n
+        x2+=n
+        y1=y1
+        y2=y2
+
+    loading_text.undraw()
+        
 
 ##    click.setText('please wait')
 
-    sleep(5)
 ##    click.setText('crawling')
-    sleep(1)
 ##    click.setText('scraping the internet')
-    sleep(1)
 ##    click.setText('creating files for jobs')
-    sleep(1)
 ##    click.setText('Almost Done')
     p1.terminate()
-    sleep(1)
     p2.terminate()
-    p3.terminate()
+##    p3.terminate()
 ##    click.setText('Done crawling')
     p1.join()            
     p2.join()
-    p3.join()
-    sleep(0.5)
+##    p3.join()
 ##    click.undraw()
 
     
@@ -216,29 +206,52 @@ if __name__== '__main__':
         displayLocation.draw(win)
         jobsLocsDrawnPos.append([displayJob,displayLocation])
         pos +=5
-    exitButton = Button(Point(80,20),7,6,'Exit')
-    mouse = win.getMouse
-    while not exitButton.isClicked(mouse):
-        if searchButton.isClicked(mouse):
-            searchVar = search.getText()
+    exitButton = Button(win,Point(80,20),7,6,'Exit')
+    pt = win.getMouse()
+    while exitButton.isClicked(pt)!=True:
+        if searchButton.isClicked(pt):
+            searchVar = search.getText().lower()
             pos = 5
+            print('johnnnnnnn johnnn johnnn\n john \n john hon')
             for eachJobLocation in range(len(jobsFileListLower)):
                 if searchVar in jobsFileListLower[eachJobLocation]:
-                    searchedList.append(jobFileList[eachJobLocation])
+                    searchedList.append(jobsFileList[eachJobLocation])
             if len(searchedList)>10:
                 searchedList = searchedList[0:10]
             else:
                 pass
             if len(searchedList)>0:
                 for eachDrawnText in range(len(jobsLocsDrawnPos)):
-                    eachDrawnText.undraw()
+                    jobsLocsDrawnPos[eachDrawnText][0].undraw()
+                    jobsLocsDrawnPos[eachDrawnText][1].undraw()
+                for eachSearched in range(len(searchedList)):
+                    print(searchedList[eachSearched])
+                    if len(searchedList[eachSearched][0])>27:
+                        jobSearchText = searchedList[eachSearched][0][0:27]+'...   '
+                    else:
+                        jobSearchText = searchedList[eachSearched][0]
+                    if len(searchedList[eachSearched][1])>27:
+                        locationSearchText = searchedList[eachSearched][1][0:27]+'...   '
+                    else:
+                        locationSearchText = searchedList[eachSearched][1]
+                    searchedJob = Text(Point(20,80-pos),jobSearchText)
+                    searchedLocation = Text(Point(65,80-pos),locationSearchText)
+                    
+                    searchedJob.draw(win)
+                    searchedLocation.draw(win)
+                    pos+=5
             else:
-                continue
-            for eachSearched in range(len(searchedList)):
-                searchedList[eachSearched] = searchedList[eachSearched].split(':')
-                searchedJob = Text(Point(20,80-pos),searchedList[eachSearched][0])
-                                  
+                notFoundText = Text(Point(50,50),'Searched Text Not Found')
+                notFoundText.draw(win)
+            if len(searchedList)>0:
+                pass
+            else:
+                notFoundText.undraw()
+        pt = win.getMouse()
+    win.close()
             
+            
+                
                     
         
                     
